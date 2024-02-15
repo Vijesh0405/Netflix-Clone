@@ -1,11 +1,7 @@
-import React from 'react'
+import React from "react";
 
 const Banner = () => {
-  return (
-   <div className='w-full bg-zinc-900 h-80'>
+  return <div className="w-full bg-zinc-900 h-80"></div>;
+};
 
-   </div>
-  )
-}
-
-export default Banner
+export default Banner;
