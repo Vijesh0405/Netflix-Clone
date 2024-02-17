@@ -1,4 +1,4 @@
-import { User } from "../models/index.js";
+import { User } from "../models/user.model.js";
 import {
   asyncHandler,
   ApiError,
@@ -50,15 +50,14 @@ const getUser = asyncHandler(async (req, res) => {
     }
   });
   
-
   // User registration
   const registerUser = asyncHandler(async (req, res) => {
   
-    const { username, email, fullName, password } = req.body;
+    const {email,password } = req.body;
   
     //checking for null value
     if (
-      [username, email, fullName, password].some((field) => field?.trim() === "")
+      [email,password].some((field) => field?.trim() === "")
     ) {
       throw new ApiError(400, "All fields are required");
     }
@@ -67,18 +66,14 @@ const getUser = asyncHandler(async (req, res) => {
     }
   
     // 3. Check user already present in db or not. If yes don't save data to db and send a response to user.
-    const existingUser = await User.findOne({
-      $or: [{ username }, { email }],
-    });
+    const existingUser = await User.findOne({ email: email });
   
     if (existingUser) {
-      throw new ApiError(409, "username or email already exists");
+      throw new ApiError(409, "email already exists");
     }
     // create a new entry in db
     const user = await User.create({
-      username,
       email,
-      fullName,
       password,
     });
   
@@ -99,20 +94,20 @@ const getUser = asyncHandler(async (req, res) => {
 
   // user login
 const loginUser = asyncHandler(async (req, res) => {
-    const { username, email, password } = req.body;
+    const { email, password } = req.body;
   
-    //email or username dono hi nahi hai to throw error
-    if (!(username || email)) {
-      throw new ApiError(400, "username or email is required ");
+    
+    if (!email) {
+      throw new ApiError(400, "email is required ");
     }
     //find user
     const user = await User.findOne({
-      $or: [{ username }, { email }], //username login ya email login dono me se koi bhi ho handle kr lega
+     email
     });
   
     //checking for user exists or not
     if (!user) {
-      throw new ApiError(404, "User not exist with this username or email");
+      throw new ApiError(404, "User not exist with this email");
     }
   
     // check password
@@ -121,7 +116,7 @@ const loginUser = asyncHandler(async (req, res) => {
     if (!isPasswordCorrect) {
       throw new ApiError(401, "password is not correct");
     }
-  
+    console.log("user found : ", user);
     //generate access and refresh token
     const { accessToken, refreshToken } =
       await generateAccessTokenAndRefreshToken(user);

@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import avatarImage from "../../assets/formBg.webp";
 import logo from "../../assets/logo.png";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation ,useNavigate} from "react-router-dom";
 import Input from "./Input";
 import Button from "./Button";
-
+import axios from "axios";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const navigate = useNavigate();
   const location = useLocation();
   const header = location.pathname === "/login" ? "Sign In" : "Sign Up";
   const value = location.pathname === "/login" ? "Sign In" : "Sign Up";
@@ -17,6 +18,48 @@ const Login = () => {
     location.pathname === "/login" ? "Sign Up now." : "Sign In now.";
 
   const signup = location.pathname === "/signup";
+
+
+  const registerUser = async()=>{
+    try {
+      if(!email && !password){
+        console.log("all fields are required");
+        return;
+      }
+      if(password!==confirmPassword){
+        console.log("password not matched");
+        return;
+      }
+      const user = await axios.post("http://localhost:5000/api/v1/users/signup",{email,password},{withCredentials:true});
+      console.log(user);
+      navigate('/');
+    } catch (error) {
+      console.log("error while signup",error);
+    }
+  }
+  const loginUser =async ()=>{
+    try {
+      // console.log(email+" "+password);
+      if(!email&&!password){
+        console.log("all fields are required");
+        navigate('/');
+        return;
+      }
+      const user = await axios.post("http://localhost:5000/api/v1/users/login",{email,password},{withCredentials:true});
+      if(!user?.data){
+        console.log("account doesn't exist, signup first");
+        navigate('/signup');
+        return;
+      }
+      else{
+        console.log(user.data);
+        navigate('/');
+      }
+    } catch (error) {
+      console.log("error while login",error);
+      
+    }
+  }
   return (
     <div
       className="bg-cover bg-center w-full h-screen relative"
@@ -45,9 +88,14 @@ const Login = () => {
           name={location.pathname === "/login" ? "Password" : "Create Password"}
         />
 
-        {signup ? <Input name="Confirm Password" /> : ""}
+        {signup ? 
+        <Input
+         name="Confirm Password"
+         value={confirmPassword}
+         onChange={(e) => setConfirmPassword(e.target.value)}
+         /> : ""}
 
-        <Button value={value} buttonTo={"/"} />
+      <Button value={value} buttonTo={"/"} onClick={signup?registerUser:loginUser} />
         {location.pathname === "/login" ? (
           <Link to={"/forgotPassword"} className="text-white text-center">
             Forgot password ?
