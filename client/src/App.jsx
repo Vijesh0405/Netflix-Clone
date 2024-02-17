@@ -9,7 +9,7 @@ const HeaderRoute = () => {
     const hideHeader = location.pathname === '/login' || location.pathname === '/signup';
 
     return (
-        <>
+        <div className=''>
             {!hideHeader && <Header />}
             <Routes>
                 <Route path='/' element={<Home />} />
@@ -20,7 +20,7 @@ const HeaderRoute = () => {
                 <Route path='/login' element={<Form />} />
                 <Route path='/signup' element={<Form />} />
             </Routes>
-        </>
+        </div>
     );
 };
 

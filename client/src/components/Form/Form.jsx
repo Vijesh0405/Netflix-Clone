@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import avatarImage from "../../assets/formBg.webp";
 import logo from "../../assets/logo.png";
 import { Link, useLocation } from "react-router-dom";
@@ -6,6 +6,9 @@ import Input from "./Input";
 import Button from "./Button";
 
 const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   const location = useLocation();
   const header = location.pathname === "/login" ? "Sign In" : "Sign Up";
   const value = location.pathname === "/login" ? "Sign In" : "Sign Up";
@@ -30,10 +33,21 @@ const Login = () => {
         >
           {header}
         </h1>
-        <Input name="Email" />
-        <Input name="Password" />
-        <Button value={value} buttonTo={"/"} />
+        <Input
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          name="Email"
+        />
 
+        <Input
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          name={location.pathname === "/login" ? "Password" : "Create Password"}
+        />
+
+        {signup ? <Input name="Confirm Password" /> : ""}
+
+        <Button value={value} buttonTo={"/"} />
         {location.pathname === "/login" ? (
           <Link to={"/forgotPassword"} className="text-white text-center">
             Forgot password ?
@@ -52,7 +66,6 @@ const Login = () => {
             Remember me
           </label>
         </div>
-
         <div className="text-white flex items-center">
           <p className="text-gray-400 ">
             New to Netflix?{" "}
