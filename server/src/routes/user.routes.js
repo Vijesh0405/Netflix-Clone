@@ -1,9 +1,11 @@
 import { Router } from "express";
 import {
+  getCookie,
   loginUser,
   logoutUser,
   registerUser,
 } from "../controllers/user.controller.js";
+import { verifyJwt } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
@@ -13,7 +15,8 @@ router.route("/").get((req, res) => {
 
 router.route("/login").post(loginUser);
 router.route("/signup").post(registerUser);
-
-router.route("/logout").post(logoutUser);
+router.route('/get-cookie')
+.get(verifyJwt,getCookie)
+router.route("/logout").post(verifyJwt,logoutUser);
 
 export default router;

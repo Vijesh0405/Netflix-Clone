@@ -45,14 +45,18 @@ const Login = () => {
         navigate('/');
         return;
       }
-      const user = await axios.post("http://localhost:5000/api/v1/users/login",{email,password},{withCredentials:true});
-      if(!user?.data){
+      const userRes = await axios.post("http://localhost:5000/api/v1/users/login",{email,password},{withCredentials:true});
+      if(!userRes?.data){
         console.log("account doesn't exist, signup first");
         navigate('/signup');
         return;
       }
       else{
-        console.log(user.data);
+        console.log(userRes.data);
+        const {user,refreshToken,accessToken} = userRes.data.data;
+        console.log(refreshToken, " ", accessToken, " ", user)
+        localStorage.setItem('refreshToken', refreshToken)
+        localStorage.setItem('accessToken', accessToken)
         navigate('/');
       }
     } catch (error) {

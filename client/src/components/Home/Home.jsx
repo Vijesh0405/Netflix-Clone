@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import Banner from "./Banner";
-
+import { getCookie } from "../../utils";
 const apiKey = "21120aeff0c33b5b5f181b077484675b";
 const url = "https://api.themoviedb.org/3";
 const imgUrl = "https://image.tmdb.org/t/p/original";
@@ -18,8 +18,6 @@ const Card = ({ img }) => (
 );
 
 const Row = ({ title, arr = [] }) => {
-
-
   return (
     <div className="row bg-zinc-900 p-1 overflow-x-auto" >
       <h2 className="p-1 text-white text-3xl font-semibold">{title}</h2>
@@ -40,6 +38,15 @@ const Home = () => {
   const [genre, setGenre] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  useEffect(() => {
+    (async () => {
+      const isLogin  = await getCookie("accessToken");
+      console.log(isLogin)
+    if (!isLogin) {
+        window.location.href = "/login";
+      }
+    })()
+  },[]);
   useEffect(() => {
     const fetchData = async () => {
       try {

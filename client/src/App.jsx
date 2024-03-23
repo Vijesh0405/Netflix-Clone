@@ -4,10 +4,11 @@ import Home from './components/Home/Home.jsx';
 import Header from './components/Header/Header.jsx';
 import Form from './components/Form/Form.jsx';
 
+
 const HeaderRoute = () => {
     const location = useLocation();
     const hideHeader = location.pathname === '/login' || location.pathname === '/signup';
-
+    
     return (
         <div className=''>
             {!hideHeader && <Header />}
