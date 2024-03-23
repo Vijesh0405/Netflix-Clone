@@ -17,7 +17,15 @@ import Loader from "./Loader";
 
 function Home() {
     const [loading, setLoading] = useState(true);
-
+    useEffect(() => {
+      (async () => {
+        const isLogin  = await getCookie("accessToken");
+        console.log(isLogin)
+      if (!isLogin) {
+          window.location.href = "/login";
+        }
+      })()
+    },[]);
     useEffect(() => {
         const timer = setTimeout(() => {
             setLoading(false);
@@ -44,15 +52,7 @@ const Home = () => {
   const [genre, setGenre] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    (async () => {
-      const isLogin  = await getCookie("accessToken");
-      console.log(isLogin)
-    if (!isLogin) {
-        window.location.href = "/login";
-      }
-    })()
-  },[]);
+ 
   useEffect(() => {
     const fetchData = async () => {
       try {
