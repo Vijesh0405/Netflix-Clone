@@ -1,0 +1,28 @@
+.app {
+    background-color: #111;
+  }
+  
+  /* width */
+  ::-webkit-scrollbar {
+    margin-top: 10px;
+    width: 7px;
+    height: 6px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey;
+    border-radius: 10px;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #cd121b;
+    border-radius: 10px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #930d0d;
+  }
+  

@@ -46,18 +46,14 @@ const Login = () => {
         navigate('/');
         return;
       }
-      const userRes = await axios.post("http://localhost:5000/api/v1/users/login",{email,password},{withCredentials:true});
-      if(!userRes?.data){
+      const user = await axios.post("http://localhost:5000/api/v1/users/login",{email,password},{withCredentials:true});
+      if(!user?.data){
         console.log("account doesn't exist, signup first");
         navigate('/signup');
         return;
       }
       else{
-        console.log(userRes.data);
-        const {user,refreshToken,accessToken} = userRes.data.data;
-        console.log(refreshToken, " ", accessToken, " ", user)
-        localStorage.setItem('refreshToken', refreshToken)
-        localStorage.setItem('accessToken', accessToken)
+        console.log(user.data);
         navigate('/');
       }
     } catch (error) {
@@ -71,10 +67,10 @@ const Login = () => {
       style={{ backgroundImage: `url(${avatarImage})` }}
     >
       <div className="absolute inset-0 bg-black opacity-60 h-full w-full"></div>
-      <div className="absolute top-0 left-0 w-40 md:w-60 flex items-center p-4 md:p-8">
+      <div className="absolute top-0 left-0 w-60 flex items-center p-8">
         <img src={logo} alt="logo" />
       </div>
-      <form className="absolute inset-0  bg-black/75 m-auto w-[370px] h-[570px] md:w-[450px] md:h-[600px] flex flex-col gap-6 px-8 py-8 md:px-16 md:py-8">
+      <form className="absolute inset-0  bg-black/75 m-auto w-[450px] h-[600px] flex flex-col gap-6 px-16 py-8">
         <h1
           className=" text-white text-3xl font-bold"
           style={{ opacity: 1, important: true }}

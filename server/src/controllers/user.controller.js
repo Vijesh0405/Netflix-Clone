@@ -6,10 +6,7 @@ import {
   checkEmailFormat,
 } from "../utils/index.js";
 
-import {
-  deleteFromCloudinary,
-  uploadOnCloudinary,
-} from "../utils/cloudinary.js";
+
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 

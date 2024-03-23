@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { Link } from "react-router-dom";
+import requests from "../../Requests/Request";
+import Row from "./Row";
 import Banner from "./Banner";
 import { getCookie } from "../../utils";
 const apiKey = "21120aeff0c33b5b5f181b077484675b";
@@ -12,10 +12,16 @@ const endpoints = {
   popular: "popular",
   topRated: "top_rated",
 };
+import Header from "../Header/Header";
+import Loader from "./Loader";
 
-const Card = ({ img }) => (
-  <img className="card w-48 mx-2 my-1 cursor-pointer transition-transform duration-500 hover:-translate-y-2" src={img} alt="cover" />
-);
+function Home() {
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setLoading(false);
+        }, 1000);
 
 const Row = ({ title, arr = [] }) => {
   return (
@@ -107,5 +113,22 @@ const Home = () => {
     </div>
   );
 };
+        return () => clearTimeout(timer);
+    }, []);
+
+    return (
+       <>
+       <Header />
+       <Loader loading={loading}/>
+       <Banner loading={loading} />
+       <div className={`${loading? "hidden":""} `}>
+           <Row title="Upcoming" fetchUrl={requests.fetchUpcoming} setLoading={setLoading} />
+           <Row title="Popular" fetchUrl={requests.fetchPopular} setLoading={setLoading} />
+           <Row title="Now Playing" fetchUrl={requests.fetchNowPlaying} setLoading={setLoading} />
+           <Row title="Top Rated" fetchUrl={requests.fetchTopRated} setLoading={setLoading} />
+       </div>
+   </>
+    );
+}
 
 export default Home;
